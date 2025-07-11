@@ -1,0 +1,18 @@
+Fix package configuration to avoid 'python' directory naming conflict
+
+The original setup.py uses find_packages() which discovers the top-level
+'python' directory and tries to install it as a package named "python".
+This conflicts with the build system trying to create a "python" directory
+for the package build process.
+
+Additionally, there's a top-level __init__.py file that conflicts with
+creating the array_record package directory during build.
+
+This patch fixes the issue by:
+1. Explicitly specifying packages=['array_record'] instead of find_packages()
+2. Using package_dir={'array_record': 'python'} to map the package to the
+   correct source directory
+3. Updating package_data to use the correct package name
+4. Removing the problematic top-level __init__.py file
+
+This allows the package to build correctly without directory naming conflicts. 
