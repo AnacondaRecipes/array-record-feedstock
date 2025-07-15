@@ -1,45 +1,51 @@
-{% set name = "<PLEASE ADD PKG NAME>" %}
-{% set version = "<PLEASE ADD PKG VERSION>" %}
+{% set name = "array_record" %}
+{% set version = "0.5.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: <sha256>
+  url: https://github.com/google/array_record/archive/v{{ version }}.tar.gz
+  sha256: 6294b67f21311034ff8ab81d4192e09a7d0767465a0bf8f49cd4e5559a7e9dcb
 
 build:
-  number: 0
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: True  # [py<38]
+  number: 0
 
 requirements:
   host:
     - python
     - pip
+    - setuptools
+    - wheel
   run:
     - python
+    - absl-py
+    - etils
 
 test:
   imports:
-    - {{ name.replace('-', '.') }}
-  requires:
-    - pip
+    - array_record
   commands:
     - pip check
+  requires:
+    - pip
 
 about:
-  home: <PLEASE ADD HOME URL>
-  summary: <PLEASE ADD SUMMARY>
+  home: https://github.com/google/array_record
+  summary: A file format that achieves a new frontier of IO efficiency
   description: |
-    <PLEASE ADD DESCRIPTION>
-  license: <PLEASE ADD LICENSE>
-  license_family: <PLEASE ADD LICENSE_FAMILY>
-  license_file: <PLEASE_ADD_LICENSE_FILE>
-  dev_url: <PLEASE ADD DEV URL>
-  doc_url: <PLEASE ADD DOC URL>
+    ArrayRecord is a new file format derived from Riegeli, achieving a new frontier of IO efficiency.
+    We designed ArrayRecord to support parallel read, write, and random access by record index.
+    ArrayRecord builds on top of Riegeli and supports the same compression algorithms.
+  license: Apache-2.0
+  license_file: LICENSE
+  license_family: Apache
+  dev_url: https://github.com/google/array_record
+  doc_url: https://github.com/google/array_record
 
 extra:
   recipe-maintainers:
-    - Jrice1317
+    - steven
