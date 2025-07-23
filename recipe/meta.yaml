@@ -6,7 +6,9 @@ package:
   version: {{ version }}
 
 build:
-  skip: true  # [py<310]
+  # Skip Windows and macOS x86_64: Google only publishes wheels for Linux and macOS ARM64
+  # Building from source requires Bazel which is not available in conda build environment
+  skip: true  # [py<310 or win or (osx and x86_64)]
   number: 0
 
 requirements:

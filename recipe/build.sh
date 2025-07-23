@@ -20,8 +20,6 @@ if [[ "$(uname -s)" == "Darwin" ]] && [[ "$(uname -m)" == "arm64" ]]; then
   elif [[ "$PYTHON_VERSION" == "cp313" ]]; then
     WHEEL_URL="https://files.pythonhosted.org/packages/63/a2/d4aafa97e211639098f206ec614f57ad3dc3d6caf871bdd88a8ea9d9975a/array_record-0.7.2-cp313-cp313-macosx_11_0_arm64.whl"
   fi
-# Note: Google does not publish macOS x86_64 wheels for array_record
-# macOS x86_64 will fall back to pip install
 elif [[ "$(uname -s)" == "Linux" ]] && [[ "$(uname -m)" == "x86_64" ]]; then
   # Linux x86_64
   if [[ "$PYTHON_VERSION" == "cp310" ]]; then
@@ -47,7 +45,7 @@ elif [[ "$(uname -s)" == "Linux" ]] && [[ "$(uname -m)" == "aarch64" ]]; then
 fi
 
 # Try to download and install the wheel
-if [[ -n "$WHEEL_URL" ]]; then
+if [[ -n "${WHEEL_URL:-}" ]]; then
   echo "Trying to download wheel from: $WHEEL_URL"
   WHEEL_NAME=$(basename "$WHEEL_URL")
   if curl -f -o "$WHEEL_NAME" "$WHEEL_URL"; then
