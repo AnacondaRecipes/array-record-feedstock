@@ -61,6 +61,6 @@ fi
 
 # Fallback: use pip to install from PyPI
 if [[ $SUCCESS -eq 0 ]]; then
-  echo "Falling back to pip install from PyPI"
+  echo "Falling back to install using pip from PyPI"
   $PYTHON -m pip install array_record==0.7.2 -vv --no-deps --no-build-isolation --only-binary=all --index-url https://pypi.org/simple
 fi

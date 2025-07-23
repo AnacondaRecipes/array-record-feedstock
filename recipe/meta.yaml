@@ -42,6 +42,7 @@ about:
     ArrayRecord builds on top of Riegeli and supports the same compression algorithms.
   license: Apache-2.0
   license_family: Apache
+  license_url: https://github.com/google/array_record/blob/main/LICENSE
   dev_url: https://github.com/google/array_record
   doc_url: https://github.com/google/array_record
 
