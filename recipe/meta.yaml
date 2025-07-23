@@ -1,25 +1,41 @@
 {% set name = "array_record" %}
-{% set version = "0.5.0" %}
+{% set version = "0.7.2" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
-source:
-  url: https://github.com/google/array_record/archive/v{{ version }}.tar.gz
-  sha256: 6294b67f21311034ff8ab81d4192e09a7d0767465a0bf8f49cd4e5559a7e9dcb
-
 build:
-  skip: true  # [py<39]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<310]
+  script: |
+    # Download the appropriate wheel for the current platform
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      if [[ "$(uname -m)" == "arm64" ]]; then
+        WHEEL_URL="https://files.pythonhosted.org/packages/63/a2/d4aafa97e211639098f206ec614f57ad3dc3d6caf871bdd88a8ea9d9975a/array_record-0.7.2-cp313-cp313-macosx_11_0_arm64.whl"
+        WHEEL_NAME="array_record-0.7.2-cp313-cp313-macosx_11_0_arm64.whl"
+      else
+        WHEEL_URL="https://files.pythonhosted.org/packages/80/00/a1e085ff62a90658b989e004d3c3587f04955570d210d2035221a9c3468c/array_record-0.7.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+        WHEEL_NAME="array_record-0.7.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      fi
+    else
+      if [[ "$(uname -m)" == "aarch64" ]]; then
+        WHEEL_URL="https://files.pythonhosted.org/packages/28/e5/390c49785dd1d6589c9bb6a1713843f286908ca6b52ed7f4cf79da1567c9/array_record-0.7.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+        WHEEL_NAME="array_record-0.7.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+      else
+        WHEEL_URL="https://files.pythonhosted.org/packages/80/00/a1e085ff62a90658b989e004d3c3587f04955570d210d2035221a9c3468c/array_record-0.7.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+        WHEEL_NAME="array_record-0.7.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      fi
+    fi
+
+    # Download and install the wheel
+    curl -o "$WHEEL_NAME" "$WHEEL_URL"
+    {{ PYTHON }} -m pip install "$WHEEL_NAME" -vv --no-deps
   number: 0
 
 requirements:
   host:
     - python
     - pip
-    - setuptools
-    - wheel
   run:
     - python
     - absl-py
@@ -41,7 +57,6 @@ about:
     We designed ArrayRecord to support parallel read, write, and random access by record index.
     ArrayRecord builds on top of Riegeli and supports the same compression algorithms.
   license: Apache-2.0
-  license_file: LICENSE
   license_family: Apache
   dev_url: https://github.com/google/array_record
   doc_url: https://github.com/google/array_record
