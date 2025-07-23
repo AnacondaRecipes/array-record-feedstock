@@ -50,7 +50,7 @@ if [[ -n "${WHEEL_URL:-}" ]]; then
   WHEEL_NAME=$(basename "$WHEEL_URL")
   if curl -f -o "$WHEEL_NAME" "$WHEEL_URL"; then
     echo "Successfully downloaded $WHEEL_NAME, installing..."
-    $PYTHON -m pip install "$WHEEL_NAME" -vv --no-deps
+    $PYTHON -m pip install "$WHEEL_NAME" -vv --no-deps --no-build-isolation
     SUCCESS=1
   else
     echo "Failed to download wheel from $WHEEL_URL"
@@ -62,5 +62,5 @@ fi
 # Fallback: use pip to install from PyPI
 if [[ $SUCCESS -eq 0 ]]; then
   echo "Falling back to pip install from PyPI"
-  $PYTHON -m pip install array_record==0.7.2 -vv --only-binary=all --index-url https://pypi.org/simple
+  $PYTHON -m pip install array_record==0.7.2 -vv --no-deps --no-build-isolation --only-binary=all --index-url https://pypi.org/simple
 fi
