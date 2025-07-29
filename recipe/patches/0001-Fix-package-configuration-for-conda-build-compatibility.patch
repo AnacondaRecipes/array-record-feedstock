@@ -1,0 +1,92 @@
+From 32c11a84f42cb1ffab0373138e09c0c1600a6d74 Mon Sep 17 00:00:00 2001
+From: Steven <scrass@anaconda.com>
+Date: Tue, 29 Jul 2025 15:16:20 -0600
+Subject: [PATCH] Fix package configuration for conda build compatibility
+
+---
+ {python => array_record_pkg}/BUILD                  |   0
+ __init__.py => array_record_pkg/__init__.py         |   0
+ .../array_record_data_source.py                     |   0
+ .../array_record_data_source_test.py                |   0
+ {python => array_record_pkg}/array_record_module.cc |   0
+ .../array_record_module_test.py                     |   0
+ {python => array_record_pkg}/testdata/BUILD         |   0
+ .../testdata/digits.array_record-00000-of-00002     | Bin
+ .../testdata/digits.array_record-00001-of-00002     | Bin
+ python/__init__.py                                  |   0
+ setup.py                                            |   6 +++---
+ 11 files changed, 3 insertions(+), 3 deletions(-)
+ rename {python => array_record_pkg}/BUILD (100%)
+ rename __init__.py => array_record_pkg/__init__.py (100%)
+ rename {python => array_record_pkg}/array_record_data_source.py (100%)
+ rename {python => array_record_pkg}/array_record_data_source_test.py (100%)
+ rename {python => array_record_pkg}/array_record_module.cc (100%)
+ rename {python => array_record_pkg}/array_record_module_test.py (100%)
+ rename {python => array_record_pkg}/testdata/BUILD (100%)
+ rename {python => array_record_pkg}/testdata/digits.array_record-00000-of-00002 (100%)
+ rename {python => array_record_pkg}/testdata/digits.array_record-00001-of-00002 (100%)
+ delete mode 100644 python/__init__.py
+
+diff --git a/python/BUILD b/array_record_pkg/BUILD
+similarity index 100%
+rename from python/BUILD
+rename to array_record_pkg/BUILD
+diff --git a/__init__.py b/array_record_pkg/__init__.py
+similarity index 100%
+rename from __init__.py
+rename to array_record_pkg/__init__.py
+diff --git a/python/array_record_data_source.py b/array_record_pkg/array_record_data_source.py
+similarity index 100%
+rename from python/array_record_data_source.py
+rename to array_record_pkg/array_record_data_source.py
+diff --git a/python/array_record_data_source_test.py b/array_record_pkg/array_record_data_source_test.py
+similarity index 100%
+rename from python/array_record_data_source_test.py
+rename to array_record_pkg/array_record_data_source_test.py
+diff --git a/python/array_record_module.cc b/array_record_pkg/array_record_module.cc
+similarity index 100%
+rename from python/array_record_module.cc
+rename to array_record_pkg/array_record_module.cc
+diff --git a/python/array_record_module_test.py b/array_record_pkg/array_record_module_test.py
+similarity index 100%
+rename from python/array_record_module_test.py
+rename to array_record_pkg/array_record_module_test.py
+diff --git a/python/testdata/BUILD b/array_record_pkg/testdata/BUILD
+similarity index 100%
+rename from python/testdata/BUILD
+rename to array_record_pkg/testdata/BUILD
+diff --git a/python/testdata/digits.array_record-00000-of-00002 b/array_record_pkg/testdata/digits.array_record-00000-of-00002
+similarity index 100%
+rename from python/testdata/digits.array_record-00000-of-00002
+rename to array_record_pkg/testdata/digits.array_record-00000-of-00002
+diff --git a/python/testdata/digits.array_record-00001-of-00002 b/array_record_pkg/testdata/digits.array_record-00001-of-00002
+similarity index 100%
+rename from python/testdata/digits.array_record-00001-of-00002
+rename to array_record_pkg/testdata/digits.array_record-00001-of-00002
+diff --git a/python/__init__.py b/python/__init__.py
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/setup.py b/setup.py
+index 79990c7..8e7227b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,6 +1,5 @@
+ """Setup.py file for array_record."""
+ 
+-from setuptools import find_packages
+ from setuptools import setup
+ from setuptools.dist import Distribution
+ 
+@@ -29,9 +28,10 @@ setup(
+     description='A file format that achieves a new frontier of IO efficiency',
+     author='ArrayRecord team',
+     author_email='no-reply@google.com',
+-    packages=find_packages(),
++    packages=['array_record'],
++    package_dir={'array_record': 'array_record_pkg'},
+     include_package_data=True,
+-    package_data={'': ['*.so']},
++    package_data={'array_record': ['*.so']},
+     python_requires='>=3.10',
+     install_requires=REQUIRED_PACKAGES,
+     extras_require={'beam': BEAM_EXTRAS},

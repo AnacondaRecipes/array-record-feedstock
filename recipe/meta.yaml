@@ -9,14 +9,16 @@ source:
   url: https://github.com/google/array_record/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 60d73cd0f038de7a1e8c376b143a5a148b85b1fc316569f4c73a33b8be3dbf80
   patches:
-    - patches/0001-Fix-package-configuration-to-avoid-python-directory-.patch
+    - patches/0001-Fix-package-configuration-for-conda-build-compatibility.patch
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   skip: True  # [py<310]
 
 requirements:
+  build:
+    - patch  # [unix]
+    - m2-patch  # [win]
   host:
     - python
     - pip
